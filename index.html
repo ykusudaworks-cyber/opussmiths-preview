@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600&display=swap&text=%E3%80%81%E3%80%82%E3%81%8B%E3%81%8C%E3%81%93%E3%81%99%E3%81%A7%E3%81%AB%E3%81%AE%E3%82%89%E3%82%8B%E4%B8%AD%E5%85%88%E5%85%A5%E5%B7%A5%E6%88%BF" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500&display=swap&text=%E3%80%81%E3%80%82%E3%81%8B%E3%81%8C%E3%81%93%E3%81%99%E3%81%A7%E3%81%AE%E3%82%89%E4%B8%AD%E5%85%88%E5%B7%A5%E6%88%BF" rel="stylesheet">
 <style>
   :root{
     color-scheme:dark;
@@ -85,42 +85,49 @@
   .hint .tmp{opacity:.6;font-size:11px}
   @media (hover:none){.hint .mouse{display:none}.hint .touch{display:inline}}
 
-  /* 中央下：入口。ボタンの箱ではなく、題字のように置く（英字・明朝の金属文字・細い罫・下へ滴る光） */
-  #enter{position:fixed;left:50%;bottom:calc(var(--pad) - 6px + env(safe-area-inset-bottom));transform:translate(-50%,14px);
-    border:0;background:none;padding:14px 34px 6px;display:flex;flex-direction:column;align-items:center;gap:9px;
-    opacity:0;pointer-events:none;transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
-  #enter::before{content:"";position:absolute;inset:-26px -70px -10px;z-index:-1;pointer-events:none;
-    background:radial-gradient(closest-side,rgba(10,7,5,.6),rgba(10,7,5,.25) 60%,transparent)}
+  /* 中央下：入口。O のマークの丸いアイコン（押せると分かるよう、光の輪が外へ広がる） */
+  #enter{position:fixed;left:50%;bottom:calc(var(--pad) + env(safe-area-inset-bottom));transform:translate(-50%,14px);
+    border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:12px;
+    opacity:0;pointer-events:none;transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1);-webkit-tap-highlight-color:transparent}
   #enter.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-  #enter .en{font-family:var(--en);font-size:10px;font-weight:500;letter-spacing:.62em;margin-right:-.62em;color:rgba(244,239,230,.55);transition:color .5s,letter-spacing .7s cubic-bezier(.2,.8,.2,1)}
-  #enter .row{display:flex;align-items:center;gap:16px}
-  #enter .rule{display:block;width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,197,0,.8));transition:width .7s cubic-bezier(.2,.8,.2,1)}
-  #enter .rule.r{transform:scaleX(-1)}
-  #enter .ja{display:flex;font-family:var(--mincho);font-weight:600;font-size:clamp(24px,2.2vw,30px);line-height:1.15;letter-spacing:.38em;margin-right:-.38em}
-  /* 一文字ずつ、磨いた真鍮に光が走る */
-  #enter .ja b{display:block;font-weight:inherit;color:transparent;-webkit-background-clip:text;background-clip:text;
-    background-image:linear-gradient(100deg,#c49a5e 0%,#ecd6aa 20%,#fffaf0 31%,#f2dcb0 40%,#c9a066 58%,#f6e6c4 78%,#c19a62 100%);
-    background-size:300% 100%;background-position:100% 0;filter:drop-shadow(0 0 14px rgba(255,140,50,.28));
-    animation:sheen 6s cubic-bezier(.5,0,.2,1) infinite;animation-delay:calc(var(--i) * .08s);
-    transition:transform .6s cubic-bezier(.2,.8,.2,1) calc(var(--i) * .04s),opacity .5s calc(var(--i) * .05s),filter .6s}
-  @keyframes sheen{0%,8%{background-position:100% 0}60%,100%{background-position:0 0}}
-  #enter .cue{display:block;position:relative;width:1px;height:24px;overflow:hidden;background:linear-gradient(rgba(244,239,230,0),rgba(244,239,230,.3))}
-  #enter .cue::after{content:"";position:absolute;left:-1px;top:-10px;width:3px;height:9px;border-radius:2px;background:#ffd58a;box-shadow:0 0 8px #ff9a3a;animation:drip 2s cubic-bezier(.6,0,.3,1) infinite}
-  @keyframes drip{0%{top:-10px;opacity:0}25%{opacity:1}100%{top:24px;opacity:0}}
-  #enter:hover .rule,#enter:focus-visible .rule{width:72px}
-  #enter:hover .en,#enter:focus-visible .en{color:var(--paper);letter-spacing:.7em}
-  #enter:hover .ja b,#enter:focus-visible .ja b{transform:translateY(-2px);filter:drop-shadow(0 0 18px rgba(255,150,60,.5));animation-duration:2.4s}
+  #enter .disc{position:relative;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 35%,rgba(48,36,28,.82),rgba(12,10,9,.9) 70%);
+    box-shadow:0 0 0 1px rgba(244,239,230,.26) inset,0 12px 34px rgba(0,0,0,.55);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s,opacity .5s}
+  /* 外へ広がる光の輪（ここを押せる、の合図） */
+  #enter .disc::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,190,90,.6);
+    animation:beacon 2.6s cubic-bezier(.2,.6,.3,1) infinite}
+  @keyframes beacon{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+  /* 縁をめぐる細い金の光 */
+  #enter .disc::after{content:"";position:absolute;inset:-4px;border-radius:50%;
+    background:conic-gradient(from 0deg,transparent 0 62%,rgba(255,197,90,.95) 86%,transparent 100%);
+    -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 1.6px),#000 calc(100% - 1.2px));
+    mask:radial-gradient(farthest-side,transparent calc(100% - 1.6px),#000 calc(100% - 1.2px));
+    animation:orbit 3.6s linear infinite}
+  @keyframes orbit{to{transform:rotate(360deg)}}
+  #enter svg{width:36px;height:36px;overflow:visible}
+  #enter .ring{fill:var(--paper)}
+  /* O のずれた四角は、炉の火のように息をする */
+  #enter .sq{fill:#ff9a3c;filter:drop-shadow(0 0 3px rgba(255,130,40,.95));animation:ember 2.6s ease-in-out infinite;
+    transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+  @keyframes ember{0%,100%{fill:#ff8a30}50%{fill:#ffd08a}}
+  #enter .lbl{font-family:var(--en);font-size:10px;font-weight:500;letter-spacing:.5em;margin-right:-.5em;color:rgba(244,239,230,.72);
+    text-shadow:0 1px 8px rgba(0,0,0,.6);transition:color .4s,opacity .4s}
+  /* 触れると：輪が金に光り、四角が O の中へすべり込む（＝中へ入る） */
+  #enter:hover .disc,#enter:focus-visible .disc{transform:scale(1.08);
+    box-shadow:0 0 0 1px rgba(255,197,90,.75) inset,0 0 36px rgba(255,140,40,.4),0 12px 34px rgba(0,0,0,.55)}
+  #enter:hover .sq,#enter:focus-visible .sq{transform:translateX(-22px)}
+  #enter:hover .lbl,#enter:focus-visible .lbl{color:var(--paper)}
   #enter:focus-visible{outline:none}
-  /* ひととおり見終わったら、光が少し速く走って誘う */
-  #enter.again .ja b{animation-duration:3.2s}
-  #enter.again .rule{animation:reach 3.2s ease-in-out infinite}
-  @keyframes reach{0%,100%{width:40px}50%{width:58px}}
-  /* 押したら：文字が熱で溶けるように散る */
+  #enter:active .disc{transform:scale(.96)}
+  /* ひととおり見終わったら、合図を少し速く */
+  #enter.again .disc::before{animation-duration:1.8s}
+  /* 押したら：四角が中へ吸い込まれ、ボタンは静かに消える */
   #enter.gone{pointer-events:none;transform:translate(-50%,0)}
-  #enter.gone .ja b{opacity:0;transform:translateY(-14px) scale(1.08);filter:blur(6px) drop-shadow(0 0 20px rgba(255,150,60,.8))}
-  #enter.gone .en,#enter.gone .cue{opacity:0;transition:opacity .4s}
-  #enter.gone .rule{width:0}
-  #enter.gone::before{opacity:0;transition:opacity .6s}
+  #enter.gone .sq{transform:translateX(-24px) scale(.2)}
+  #enter.gone .disc{transform:scale(.7);opacity:0;transition-delay:.15s}
+  #enter.gone .lbl{opacity:0}
 
   @media (max-width:640px){
     .what{font-size:11px;max-width:15em}
@@ -162,7 +169,7 @@
   .fallback{display:none}
   .no-webgl .fallback{display:grid;position:fixed;inset:0;place-items:center;padding:24px;text-align:center;color:var(--dim)}
 
-  @media (prefers-reduced-motion:reduce){.grain{animation:none}#enter .ja b,#enter .cue::after,#enter.again .rule{animation:none}#after.show::before{animation:none}}
+  @media (prefers-reduced-motion:reduce){.grain{animation:none}#enter .disc::before,#enter .disc::after,#enter .sq{animation:none}#after.show::before{animation:none}}
 </style>
 </head>
 <body>
@@ -192,10 +199,9 @@
 
 <p class="hint"><span class="mouse">動かすと空間が裂け、なぞると質感が変わる<br>クリックで打つ　／　スクロールで中へ</span><span class="touch">なぞると空間と質感が変わる　／　タップで打つ</span><br><span class="tmp">試作・背景は仮の映像</span></p>
 
-<button id="enter" type="button" aria-label="工房に入る">
-  <span class="en" aria-hidden="true">ENTER THE FORGE</span>
-  <span class="row" aria-hidden="true"><i class="rule"></i><span class="ja"><b style="--i:0">工</b><b style="--i:1">房</b><b style="--i:2">に</b><b style="--i:3">入</b><b style="--i:4">る</b></span><i class="rule r"></i></span>
-  <span class="cue" aria-hidden="true"></span>
+<button id="enter" type="button" aria-label="工房に入る" title="工房に入る">
+  <span class="disc"><svg viewBox="-56 -56 112 112" aria-hidden="true"><g transform="rotate(-45)"><path class="ring" d="M48.82 -10.80 L47.78 -14.73 L46.43 -18.55 L44.77 -22.26 L42.82 -25.82 L40.58 -29.21 L38.08 -32.40 L35.33 -35.39 L32.34 -38.13 L29.14 -40.63 L25.75 -42.86 L22.18 -44.81 L18.47 -46.46 L14.64 -47.81 L10.72 -48.84 L6.72 -49.55 L2.68 -49.93 L-1.38 -49.98 L-5.43 -49.70 L-9.45 -49.10 L-13.40 -48.17 L-17.26 -46.93 L-21.01 -45.37 L-24.62 -43.52 L-28.07 -41.37 L-31.34 -38.96 L-34.40 -36.29 L-37.23 -33.38 L-39.81 -30.25 L-42.13 -26.92 L-44.18 -23.41 L-45.93 -19.75 L-47.38 -15.96 L-48.52 -12.06 L-49.34 -8.09 L-49.84 -4.06 L-50.00 -0.00 L-49.84 4.06 L-49.34 8.09 L-48.52 12.06 L-47.38 15.96 L-45.93 19.75 L-44.18 23.41 L-42.13 26.92 L-39.81 30.25 L-37.23 33.38 L-34.40 36.29 L-31.34 38.96 L-28.07 41.37 L-24.62 43.52 L-21.01 45.37 L-17.26 46.93 L-13.40 48.17 L-9.45 49.10 L-5.43 49.70 L-1.38 49.98 L2.68 49.93 L6.72 49.55 L10.72 48.84 L14.64 47.81 L18.47 46.46 L22.18 44.81 L25.75 42.86 L29.14 40.63 L32.34 38.13 L35.33 35.39 L38.08 32.40 L40.58 29.21 L42.82 25.82 L44.77 22.26 L46.43 18.55 L47.78 14.73 L48.82 10.80 L30.12 10.80 L29.19 13.11 L28.09 15.33 L26.81 17.47 L25.38 19.49 L23.79 21.41 L22.05 23.19 L20.19 24.83 L18.20 26.32 L16.10 27.65 L13.90 28.82 L11.63 29.81 L9.28 30.63 L6.87 31.25 L4.42 31.69 L1.95 31.94 L-0.54 32.00 L-3.02 31.86 L-5.48 31.53 L-7.91 31.01 L-10.29 30.30 L-12.62 29.41 L-14.86 28.34 L-17.02 27.10 L-19.07 25.70 L-21.01 24.14 L-22.82 22.44 L-24.49 20.60 L-26.01 18.64 L-27.38 16.56 L-28.58 14.38 L-29.62 12.12 L-30.47 9.79 L-31.13 7.39 L-31.61 4.95 L-31.90 2.48 L-32.00 -0.00 L-31.90 -2.48 L-31.61 -4.95 L-31.13 -7.39 L-30.47 -9.79 L-29.62 -12.12 L-28.58 -14.38 L-27.38 -16.56 L-26.01 -18.64 L-24.49 -20.60 L-22.82 -22.44 L-21.01 -24.14 L-19.07 -25.70 L-17.02 -27.10 L-14.86 -28.34 L-12.62 -29.41 L-10.29 -30.30 L-7.91 -31.01 L-5.48 -31.53 L-3.02 -31.86 L-0.54 -32.00 L1.95 -31.94 L4.42 -31.69 L6.87 -31.25 L9.28 -30.63 L11.63 -29.81 L13.90 -28.82 L16.10 -27.65 L18.20 -26.32 L20.19 -24.83 L22.05 -23.19 L23.79 -21.41 L25.38 -19.49 L26.81 -17.47 L28.09 -15.33 L29.19 -13.11 L30.12 -10.80Z"/><rect class="sq" x="12.90" y="-10.80" width="21.60" height="21.60" rx="1.75"/></g></svg></span>
+  <span class="lbl" aria-hidden="true">ENTER</span>
 </button>
 
 <section id="after" aria-label="工房の中">
